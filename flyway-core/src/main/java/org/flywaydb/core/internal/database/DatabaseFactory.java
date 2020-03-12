@@ -20,6 +20,7 @@ import org.flywaydb.core.api.configuration.Configuration;
 import org.flywaydb.core.api.logging.Log;
 import org.flywaydb.core.api.logging.LogFactory;
 import org.flywaydb.core.internal.database.base.Database;
+import org.flywaydb.core.internal.database.clickhouse.ClickhouseDatabase;
 import org.flywaydb.core.internal.database.cockroachdb.CockroachDBDatabase;
 import org.flywaydb.core.internal.database.db2.DB2Database;
 import org.flywaydb.core.internal.database.derby.DerbyDatabase;
@@ -125,6 +126,11 @@ public class DatabaseFactory {
 
 
                 );
+
+            case CLICKHOUSE:
+                return new ClickhouseDatabase(configuration, connection, originalAutoCommit);
+
+
             case DB2:
                 return new DB2Database(configuration, connection, originalAutoCommit
 

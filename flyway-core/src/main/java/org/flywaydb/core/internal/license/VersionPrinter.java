@@ -19,12 +19,15 @@ import org.flywaydb.core.api.FlywayException;
 import org.flywaydb.core.api.logging.Log;
 import org.flywaydb.core.api.logging.LogFactory;
 import org.flywaydb.core.internal.util.DateUtils;
+import org.flywaydb.core.internal.util.FileCopyUtils;
 import org.flywaydb.core.internal.util.IOUtils;
 import org.flywaydb.core.internal.line.LineReader;
 import org.flywaydb.core.internal.resource.LoadableResource;
 import org.flywaydb.core.internal.resource.classpath.ClassPathResource;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -118,7 +121,7 @@ public class VersionPrinter {
     }
 
     private static String readVersion() {
-        String version;
+        /*String version;
         LoadableResource resource = new ClassPathResource(null,
                 "org/flywaydb/core/internal/version.txt",
                 VersionPrinter.class.getClassLoader(), Charset.forName("UTF-8"));
@@ -129,6 +132,15 @@ public class VersionPrinter {
         } finally {
             IOUtils.close(lineReader);
         }
-        return version;
+        // return version;*/
+
+        try {
+            return FileCopyUtils.copyToString(
+                    VersionPrinter.class.getClassLoader().getResourceAsStream("org/flywaydb/core/internal/version.txt"),
+                    StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new FlywayException("Unable to read Flyway version: " + e.getMessage(), e);
+        }
+
     }
 }

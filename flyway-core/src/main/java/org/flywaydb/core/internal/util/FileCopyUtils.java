@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * Utility class for copying files and their contents. Inspired by Spring's own.
@@ -115,5 +116,20 @@ public class FileCopyUtils {
             IOUtils.close(in);
             IOUtils.close(out);
         }
+    }
+
+    /**
+     * Copy the contents of the given InputStream into a new String based on this encoding.
+     * Closes the stream when done.
+     *
+     * @param in       the stream to copy from
+     * @param encoding The encoding to use.
+     * @return The new String.
+     * @throws IOException in case of I/O errors
+     */
+    public static String copyToString(InputStream in, Charset encoding) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream(4096);
+        copy(in, out);
+        return out.toString(encoding.name());
     }
 }
